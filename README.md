@@ -59,6 +59,8 @@ USB-RELAY-X-RL8/
 - **説明**:  
   Web Serial API を利用して、ブラウザ上からリレー制御を行うサンプルです。  
   ボタンをクリックすることで、各リレーのオン／オフコマンド（A1～H1 および A0～H0）を送信できます。
+
+  [Web サンプルを試す](https://xyz-product.github.io/USB-RELAY-X-RL8/)
 - **動作環境**:  
   Chromium 系ブラウザ（Chrome、Edge など）で動作させる必要があります。
 
