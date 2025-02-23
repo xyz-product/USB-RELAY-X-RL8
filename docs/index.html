@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>USB Relay Control - Web Serial API</title>
+  <style>
+    button {
+      margin: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .channel {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>USB Relay Control - X-RL8</h1>
+  <button id="connect">Connect</button>
+  
+  <!-- 接続後に表示される各チャネルのボタン群 -->
+  <div id="buttons" style="display:none;">
+    <div class="channel">
+      <h2>Channel A</h2>
+      <button data-cmd="A1">A1 (On)</button>
+      <button data-cmd="A0">A0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel B</h2>
+      <button data-cmd="B1">B1 (On)</button>
+      <button data-cmd="B0">B0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel C</h2>
+      <button data-cmd="C1">C1 (On)</button>
+      <button data-cmd="C0">C0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel D</h2>
+      <button data-cmd="D1">D1 (On)</button>
+      <button data-cmd="D0">D0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel E</h2>
+      <button data-cmd="E1">E1 (On)</button>
+      <button data-cmd="E0">E0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel F</h2>
+      <button data-cmd="F1">F1 (On)</button>
+      <button data-cmd="F0">F0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel G</h2>
+      <button data-cmd="G1">G1 (On)</button>
+      <button data-cmd="G0">G0 (Off)</button>
+    </div>
+    <div class="channel">
+      <h2>Channel H</h2>
+      <button data-cmd="H1">H1 (On)</button>
+      <button data-cmd="H0">H0 (Off)</button>
+    </div>
+  </div>
+  
+  <script>
+    let port;
+    const connectButton = document.getElementById('connect');
+    const buttonsDiv = document.getElementById('buttons');
+
+    // 接続ボタンのクリックイベント
+    connectButton.addEventListener('click', async () => {
+      try {
+        // シリアルポート選択ダイアログを表示（ユーザーが選択）
+        port = await navigator.serial.requestPort();
+        // 必要な設定（baudRate は任意、USBシリアルの場合は任意の値でOK）
+        await port.open({ baudRate: 9600 });
+        connectButton.disabled = true;
+        buttonsDiv.style.display = 'block';
+        console.log('Connected to port.');
+      } catch (err) {
+        console.error('Error opening serial port:', err);
+      }
+    });
+
+    // 指定されたコマンドを送信する関数
+    async function sendCommand(cmd) {
+      if (!port) {
+        console.error('Serial port not open.');
+        return;
+      }
+      const encoder = new TextEncoder();
+      const writer = port.writable.getWriter();
+      try {
+        await writer.write(encoder.encode(cmd));
+        console.log('Sent:', cmd);
+      } catch (err) {
+        console.error('Error writing to serial port:', err);
+      } finally {
+        writer.releaseLock();
+      }
+    }
+
+    // 各ボタンのクリックイベントを設定（data-cmd属性の値を送信）
+    document.querySelectorAll('button[data-cmd]').forEach(button => {
+      button.addEventListener('click', () => {
+        const cmd = button.getAttribute('data-cmd');
+        sendCommand(cmd);
+      });
+    });
+  </script>
+</body>
+</html>
