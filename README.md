@@ -9,7 +9,7 @@ X-RL8 は、USBシリアル通信を利用して8チャネル（A～H）のリ�
 ## 製品情報
 
 - **製品名**: USBリレーモジュール X-RL8
-- **販売リンク**: https://www.amazon.co.jp/dp/B0DXQ3MDGN
+- **販売リンク**: https://www.amazon.co.jp/dp/B0FKXRR62P
 
 
 ## 概要
